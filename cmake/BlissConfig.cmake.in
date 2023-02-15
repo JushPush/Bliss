@@ -1,0 +1,1 @@
+include("@CMAKE_INSTALL_PREFIX@/@Bliss_CONFIG_DIR@/Bliss-Exports.cmake")

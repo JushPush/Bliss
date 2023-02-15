@@ -11,7 +11,7 @@ set(VALID_BUILD_TYPES "Release" "Debug" "MinSizeRel" "RelWithDebInfo")
 option(BUILD_SHARED_LIBS "True when building a shared library" True)
 
 # Set the project name
-project (NENG)
+project (Bliss)
 
 #set CMAKE_BUILD_TYPE default value
 if(NOT CMAKE_CONFIGURATION_TYPES)
