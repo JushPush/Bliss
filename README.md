@@ -1,4 +1,5 @@
 # Bliss Engine
+[![CMake](https://github.com/EinKara/Bliss/actions/workflows/cmake.yml/badge.svg)](https://github.com/EinKara/Bliss/actions/workflows/cmake.yml)
 
 User-Friendly software engine with GLFW implementation.
 
