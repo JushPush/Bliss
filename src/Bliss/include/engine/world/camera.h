@@ -15,6 +15,7 @@
 struct Camera
 {
 public:
+	Camera() {}
 	Camera(const glm::vec3& pos, float fov, float aspect, float zNear, float zFar)
 	{
 		this->pos = pos;

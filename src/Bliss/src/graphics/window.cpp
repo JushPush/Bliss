@@ -37,7 +37,7 @@ bool Window::Init() {
 
     gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
     gladLoadGL();
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
 
     renderer.Init(window);
 
@@ -49,7 +49,7 @@ bool Window::Init() {
 
     while (!glfwWindowShouldClose(window))
     {
-        //glClearColor ( 1.0f, 1.0f, 1.0f, 1.0f );
+        glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f );
 
         double currentTime = glfwGetTime();
         frameCount++;

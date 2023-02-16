@@ -3,38 +3,11 @@
 #include <iostream>
 #include <fstream>
 
-void Shader::Init() {
-    program = glCreateProgram();
-
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    glCompileShader(vertex_shader);
- 
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    glCompileShader(fragment_shader);
-
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
- 
-    //mvp_location = glGetUniformLocation(program, "MVP");
-    //vpos_location = glGetAttribLocation(program, "vPos");
-    //vcol_location = glGetAttribLocation(program, "vCol");
- 
-    //glEnableVertexAttribArray(vpos_location);
-    //glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-    //                      sizeof(vertices[0]), (void*) 0);
-    //glEnableVertexAttribArray(vcol_location);
-    //glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-    //                      sizeof(vertices[0]), (void*) (sizeof(float) * 2));
-}
-
-/*Shader::Shader(const std::string& fileName)
+Shader::Shader(const std::string& fileName)
 {
 	m_program = glCreateProgram();
-	//m_shaders[0] = CreateShader(basic_shader_vs, GL_VERTEX_SHADER);
-	//m_shaders[1] = CreateShader(basic_shader_fs, GL_FRAGMENT_SHADER);
+	m_shaders[0] = CreateShader(LoadShader(fileName + ".vs"), GL_VERTEX_SHADER);
+	m_shaders[1] = CreateShader(LoadShader(fileName + ".fs"), GL_FRAGMENT_SHADER);
 
 	for(unsigned int i = 0; i < NUM_SHADERS; i++)
 		glAttachShader(m_program, m_shaders[i]);
@@ -52,22 +25,22 @@ void Shader::Init() {
 	m_uniforms[0] = glGetUniformLocation(m_program, "MVP");
 	m_uniforms[1] = glGetUniformLocation(m_program, "Normal");
 	m_uniforms[2] = glGetUniformLocation(m_program, "lightDirection");
-}*/
+}
 
 Shader::~Shader()
 {
-    glDetachShader(program, vertex_shader);
-    glDeleteShader(vertex_shader);
+	for(unsigned int i = 0; i < NUM_SHADERS; i++)
+    {
+        glDetachShader(m_program, m_shaders[i]);
+        glDeleteShader(m_shaders[i]);
+    }
 
-    glDetachShader(program, fragment_shader);
-    glDeleteShader(vertex_shader);
-
-	glDeleteProgram(program);
+	glDeleteProgram(m_program);
 }
 
 void Shader::Bind()
 {
-	glUseProgram(program);
+	glUseProgram(m_program);
 }
 
 void Shader::Update(const Transform& transform, const Camera& camera)
@@ -75,12 +48,12 @@ void Shader::Update(const Transform& transform, const Camera& camera)
 	glm::mat4 MVP = transform.GetMVP(camera);
 	glm::mat4 Normal = transform.GetModel();
 
-	//glUniformMatrix4fv(m_uniforms[0], 1, GL_FALSE, &MVP[0][0]);
-	//glUniformMatrix4fv(m_uniforms[1], 1, GL_FALSE, &Normal[0][0]);
-	//glUniform3f(m_uniforms[2], 0.0f, 0.0f, 1.0f);
+	glUniformMatrix4fv(m_uniforms[0], 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(m_uniforms[1], 1, GL_FALSE, &Normal[0][0]);
+	glUniform3f(m_uniforms[2], 0.0f, 0.0f, 1.0f);
 }
 
-/*std::string Shader::LoadShader(const std::string& fileName)
+std::string Shader::LoadShader(const std::string& fileName)
 {
     std::ifstream file;
     file.open((fileName).c_str());
@@ -143,4 +116,4 @@ GLuint Shader::CreateShader(const std::string& text, unsigned int type)
     CheckShaderError(shader, GL_COMPILE_STATUS, false, "Error compiling shader!");
 
     return shader;
-}*/
+}

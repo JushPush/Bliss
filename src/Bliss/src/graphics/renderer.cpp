@@ -27,8 +27,8 @@ void Renderer::Update(GLFWwindow* window) {
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glPixelZoom(1.0, -1.0);
-	glRasterPos2f(0.0, 0.0);
+	//glPixelZoom(1.0, -1.0);
+	//glRasterPos2f(0.0, 0.0);
 	//glDrawPixels(this->display.width, this->display.height, GL_RGB, GL_UNSIGNED_BYTE, display.data);
 }
 
