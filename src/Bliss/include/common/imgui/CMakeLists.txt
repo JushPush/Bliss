@@ -3,8 +3,8 @@ FILE(GLOB HEADS
 )
 
 set(FILES ${HEADS})
-set(SUBDIRECTORIES "world;ui;core;objects")
-set(RELATIVE_PATH "include/engine")
+set(SUBDIRECTORIES "")
+set(RELATIVE_PATH "include/common/imgui")
 
 #Add all subdirectories 
 foreach(VAR ${SUBDIRECTORIES})

@@ -1,10 +1,11 @@
-FILE(GLOB HEADS
-    *.h
+FILE(GLOB SOURCES
+    *.cpp
+	*.c
 )
 
-set(FILES ${HEADS})
-set(SUBDIRECTORIES "world;ui;core;objects")
-set(RELATIVE_PATH "include/engine")
+set(FILES ${SOURCES})
+set(SUBDIRECTORIES "")
+set(RELATIVE_PATH "src/audio")
 
 #Add all subdirectories 
 foreach(VAR ${SUBDIRECTORIES})

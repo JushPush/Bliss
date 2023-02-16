@@ -1,17 +1,13 @@
 #include <graphics/renderer.h>
 
-void Renderer::DrawLine(v2 start, v2 end) {
-    glPointSize(10);
-	glLineWidth(2.5); 
-	glColor3f(1.0, 0.0, 0.0);
+void Renderer::DrawLine(v2 start, v2 end, rgb color, int point_size, double line_width) {
+	glPointSize(point_size);
+	glLineWidth(line_width); 
+	glColor3f((color.r / 255.0), (color.g / 255.0), (color.b / 255.0));
 	glBegin(GL_LINES);
 	glVertex3f(start.x, start.y,0.0);
 	glVertex3f(end.x,end.y,0.0);
 	glEnd();
-}
-
-void Renderer::DrawLine(v2 start, v2 end, int point_size, double line_width) {
-
 }
 
 bool Renderer::Init(GLFWwindow* window) {
@@ -33,7 +29,7 @@ void Renderer::Update(GLFWwindow* window) {
 
 	glPixelZoom(1.0, -1.0);
 	glRasterPos2f(0.0, 0.0);
-	glDrawPixels(this->display.width, this->display.height, GL_RGB, GL_UNSIGNED_BYTE, display.data);
+	//glDrawPixels(this->display.width, this->display.height, GL_RGB, GL_UNSIGNED_BYTE, display.data);
 }
 
 void Renderer::PostUpdate(GLFWwindow* window) {

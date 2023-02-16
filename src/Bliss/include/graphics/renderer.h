@@ -10,6 +10,8 @@
 #include "../math/math.h"
 #include "color.h"
 
+#include "shader.h"
+
 class Renderer {
 public:
     struct {
@@ -21,9 +23,6 @@ public:
         unsigned char* data = {};
     } display;
 
-    GLuint vertex_buffer, vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
-
     Renderer() {}
 
     Renderer(rect disp, GLFWwindow* window) {
@@ -33,14 +32,14 @@ public:
         display.height = (int)disp.end.y;
     }
 
+    ~Renderer() {}
+
     bool Init(GLFWwindow* window);
 
     void Update(GLFWwindow* window);
     void PostUpdate(GLFWwindow* window);
 
-    void DrawLine(v2 start, v2 end);
-
-    void DrawLine(v2 start, v2 end, int point_size, double line_width);
+    void DrawLine(v2 start, v2 end, rgb color, int point_size, double line_width);
 
     void DrawBox(rect box, rgb color, bool fill);
 

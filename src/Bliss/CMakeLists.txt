@@ -1,7 +1,7 @@
 add_library("${PROJECT_NAME}" "")
 add_library(Bliss::Bliss ALIAS "${PROJECT_NAME}")
 
-target_link_libraries("${PROJECT_NAME}" glfw GLEW glut GL GLU)
+target_link_libraries("${PROJECT_NAME}" glfw GLEW glut GL GLU pthread)
 
 set(Bliss_EXPORT_FILE "Bliss-Exports")
 install(TARGETS "${PROJECT_NAME}" EXPORT "${Bliss_EXPORT_FILE}")

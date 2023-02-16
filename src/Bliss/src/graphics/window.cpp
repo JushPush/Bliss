@@ -67,6 +67,8 @@ bool Window::Init() {
 
         double time = glfwGetTime();
 
+        this->Input();
+
         this->Update(time);
 
         this->Render();

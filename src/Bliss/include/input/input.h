@@ -5,7 +5,11 @@
 
 #include "../math/math.h"
 
-struct Input {
+struct Keys {
+    // Implement key library
+} keys;
+
+struct INPUT {
     struct {
         bool _keys[GLFW_KEY_LAST] = {};
         bool _mouse_buttons[GLFW_MOUSE_BUTTON_LAST] = {};

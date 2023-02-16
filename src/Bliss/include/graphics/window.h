@@ -30,7 +30,7 @@ public:
         false
     };
     Renderer renderer;
-    Input input;
+    INPUT input;
 
     struct {
         // TODO: implement custom mouse cursor
@@ -55,8 +55,9 @@ public:
     virtual void OnCreate() = 0;
     virtual void OnDestroy() = 0;
 
-    virtual void KeyPress(int key, int scancode, int action, int mods, bool mouse) = 0;
+    //virtual void KeyPress(int key, int scancode, int action, int mods) = 0;
 
+    virtual void Input() = 0;
     virtual void Update(double time) = 0;
     virtual void Render() = 0;
 
@@ -89,7 +90,6 @@ private:
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
         Window* obj = (Window* )glfwGetWindowUserPointer(window);
         obj->input.inputs._keys[key] = (action == GLFW_PRESS);
-        obj->KeyPress(key,scancode,action,mods, false);
     }
 
     static void cursor_position_callback(GLFWwindow* window, double xpos, double ypos)
@@ -103,7 +103,6 @@ private:
     {
         Window* obj = (Window* )glfwGetWindowUserPointer(window);
         obj->input.inputs._mouse_buttons[button] = (action == GLFW_PRESS);
-        //obj->KeyPress(button,NULL,action,mods,true);
     }
 
     static void window_size_callback(GLFWwindow* window, int width, int height) {
