@@ -5,11 +5,11 @@ User-Friendly software engine with GLFW implementation.
 
 ## Requirements
 
-| Library                                           | H           |
-| ------------------------------------------------- | ----------- |
-| **[GLFW](https://www.glfw.org/)**                 |             |
-| **[glad](https://glad.dav1d.de/)**                |             |
-| **[ASIO (boost)](https://think-async.com/Asio/)** |             |
+| Library                                           | Download                               |
+| ------------------------------------------------- | -------------------------------------- |
+| **[GLFW](https://www.glfw.org/)**                 | ```console./scripts/requirements.sh``` |
+| **[glad](https://glad.dav1d.de/)**                | **[Mirror](https://glad.dav1d.de/)**   |
+| **[ASIO (boost)](https://think-async.com/Asio/)** | ./scripts/requirements.sh              |
 
 ### Download
 
