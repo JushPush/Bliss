@@ -1,1 +1,1 @@
-sudo apt-get install -y libasio-dev
+sudo apt-get install -y libasio-dev libglfw3-dev
