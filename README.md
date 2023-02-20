@@ -7,13 +7,9 @@ User-Friendly Open Source software engine with GLFW implementation.
 
 | Library                                           | Download                                  |
 | ------------------------------------------------- | ----------------------------------------- |
-| **[GLFW](https://www.glfw.org/)**                 | ```console
- $ ./scripts/requirements.sh
- ``` |
+| **[GLFW](https://www.glfw.org/)**                 | ```$ ./scripts/requirements.sh```         |
 | **[glad](https://glad.dav1d.de/)**                | **[Mirror](https://glad.dav1d.de/)**      |
-| **[ASIO (boost)](https://think-async.com/Asio/)** | ```console 
-$ ./scripts/requirements.sh
-``` |
+| **[ASIO (boost)](https://think-async.com/Asio/)** | ```$ ./scripts/requirements.sh```         |
 
 ### Download
 
