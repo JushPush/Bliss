@@ -3,7 +3,7 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#include "graphics/window.h"
+#include "graphics/graphics.h"
 #include "input/input.h"
 
 #include "defines.h"

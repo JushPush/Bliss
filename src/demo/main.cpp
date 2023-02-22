@@ -8,80 +8,52 @@ windowData data = {
 	"Bliss Demo Window",
 	false
 };
+ 
+static const char* vertex_shader_text =
+"#version 110\n"
+"uniform mat4 MVP;\n"
+"attribute vec3 vCol;\n"
+"attribute vec2 vPos;\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_Position = MVP * vec4(vPos, 0.0, 1.0);\n"
+"    color = vCol;\n"
+"}\n";
+ 
+static const char* fragment_shader_text =
+"#version 110\n"
+"varying vec3 color;\n"
+"void main()\n"
+"{\n"
+"    gl_FragColor = vec4(color, 1.0);\n"
+"}\n";
 
 class nDemo : public Window {
 public:
-	
-	Mesh *mesh;
-
-	Shader *shader;
-
-	Camera camera;
-
-	Transform transform;
-
+	/*Vertex vertices[3] = {
+		{ -0.6f, -0.4f, 1.f, 0.f, 0.f },
+		{  0.6f, -0.4f, 0.f, 1.f, 0.f },
+		{   0.f,  0.6f, 0.f, 0.f, 1.f }
+	};*/
+	Vertex vertices[4] = {
+		{ -1.0f, -1.0f, 1.f, 0.f, 0.f },
+		{  1.0f, -1.0f, 0.f, 1.f, 0.f },
+		{  1.0f,  1.0f, 0.f, 0.f, 1.f },
+		{ -1.0f,  1.0f, 0.f, 0.f, 1.f }
+	};
+	Mesh mesh;
+	Shader shader;
 	nDemo() {
 		
 	}
+	
 
 	nDemo(windowData dat) {windat = dat;}
 	void OnCreate() override {
-		Vertex vertices[] =
-		{
-			Vertex(glm::vec3(-1, -1, -1), glm::vec2(1, 0), glm::vec3(0, 0, -1)),
-			Vertex(glm::vec3(-1, 1, -1), glm::vec2(0, 0), glm::vec3(0, 0, -1)),
-			Vertex(glm::vec3(1, 1, -1), glm::vec2(0, 1), glm::vec3(0, 0, -1)),
-			Vertex(glm::vec3(1, -1, -1), glm::vec2(1, 1), glm::vec3(0, 0, -1)),
+		//shader = Shader(vertex_shader_text, fragment_shader_text, vertices);
 
-			Vertex(glm::vec3(-1, -1, 1), glm::vec2(1, 0), glm::vec3(0, 0, 1)),
-			Vertex(glm::vec3(-1, 1, 1), glm::vec2(0, 0), glm::vec3(0, 0, 1)),
-			Vertex(glm::vec3(1, 1, 1), glm::vec2(0, 1), glm::vec3(0, 0, 1)),
-			Vertex(glm::vec3(1, -1, 1), glm::vec2(1, 1), glm::vec3(0, 0, 1)),
-
-			Vertex(glm::vec3(-1, -1, -1), glm::vec2(0, 1), glm::vec3(0, -1, 0)),
-			Vertex(glm::vec3(-1, -1, 1), glm::vec2(1, 1), glm::vec3(0, -1, 0)),
-			Vertex(glm::vec3(1, -1, 1), glm::vec2(1, 0), glm::vec3(0, -1, 0)),
-			Vertex(glm::vec3(1, -1, -1), glm::vec2(0, 0), glm::vec3(0, -1, 0)),
-
-			Vertex(glm::vec3(-1, 1, -1), glm::vec2(0, 1), glm::vec3(0, 1, 0)),
-			Vertex(glm::vec3(-1, 1, 1), glm::vec2(1, 1), glm::vec3(0, 1, 0)),
-			Vertex(glm::vec3(1, 1, 1), glm::vec2(1, 0), glm::vec3(0, 1, 0)),
-			Vertex(glm::vec3(1, 1, -1), glm::vec2(0, 0), glm::vec3(0, 1, 0)),
-
-			Vertex(glm::vec3(-1, -1, -1), glm::vec2(1, 1), glm::vec3(-1, 0, 0)),
-			Vertex(glm::vec3(-1, -1, 1), glm::vec2(1, 0), glm::vec3(-1, 0, 0)),
-			Vertex(glm::vec3(-1, 1, 1), glm::vec2(0, 0), glm::vec3(-1, 0, 0)),
-			Vertex(glm::vec3(-1, 1, -1), glm::vec2(0, 1), glm::vec3(-1, 0, 0)),
-
-			Vertex(glm::vec3(1, -1, -1), glm::vec2(1, 1), glm::vec3(1, 0, 0)),
-			Vertex(glm::vec3(1, -1, 1), glm::vec2(1, 0), glm::vec3(1, 0, 0)),
-			Vertex(glm::vec3(1, 1, 1), glm::vec2(0, 0), glm::vec3(1, 0, 0)),
-			Vertex(glm::vec3(1, 1, -1), glm::vec2(0, 1), glm::vec3(1, 0, 0)),
-		};
-
-		unsigned int indices[] = {0, 1, 2,
-							  0, 2, 3,
-
-							  6, 5, 4,
-							  7, 6, 4,
-
-							  10, 9, 8,
-							  11, 10, 8,
-
-							  12, 13, 14,
-							  12, 14, 15,
-
-							  16, 17, 18,
-							  16, 18, 19,
-
-							  22, 21, 20,
-							  23, 22, 20
-	                          };
-
-		mesh = new Mesh(vertices, sizeof(vertices)/sizeof(vertices[0]), indices, sizeof(indices)/sizeof(indices[0]));
-
-		shader = new Shader("./res/basicShader");
-		camera = Camera(glm::vec3(0.0f, 0.0f, -5.0f), 70.0f, (float)this->windat.width/(float)this->windat.height, 0.1f, 100.0f);
+		//mesh = Mesh(vertices);
 	}
 
 	void OnDestroy() override {
@@ -93,30 +65,27 @@ public:
 	}
 
 	void Update(double time) override {
+		float ratio;
+        int width, height;
+ 
+        glfwGetFramebufferSize(this->getWindow(), &width, &height);
+        ratio = width / (float) height;
 
-		if (input.isMouseButtonPressed(GLFW_MOUSE_BUTTON_LEFT)) {
-			this->renderer.SetPixel(input.getMousePosition().x, input.getMousePosition().y, rgb(255,0,0));
-		}
-		//mesh.Update();
+		//mesh.Update(glfwGetTime(), ratio, mvp_location);
+        //shader.Update();
 	}
 
 	void Render() override {
-		this->renderer.DrawBox(rect(v2(0,0),v2(this->windat.width,this->windat.height / 2)),rgb(251,64,174), true);
-		shader->Bind();
-
-		shader->Update(transform, camera);
-		mesh->Render();
+		shader.Render();
+		mesh.Render();
 	}
 };
 
 int main() {
 	program.networker->BeginConnection();
-	//Host* host = new Host();
 
 	program.window[0] = new nDemo(data);
 	program.window[0]->Init();
-
-	//program_loop();
 
 	return 0;
 }

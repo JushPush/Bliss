@@ -1,15 +1,27 @@
-/* date = February 1st 2023 8:37 am */
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
 
-#ifndef WINDOW_H
-#define WINDOW_H
+#define GLFW_INCLUDE_NONE
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
-#include <iostream>
-#include <string>
-
-#include "renderer.h"
+#include "../math/math.h"
 #include "../input/input.h"
-
 #include "../engine/core/error.h"
+
+#pragma region Data stuff ig
+struct rgb {
+    int r, g, b;
+};
+
+union COLOR {
+    uint8_t bytes[3];
+};
+
+COLOR convertRGB(rgb _rgb_);
+
+rgb _rgb(int red, int green, int blue);
+#define rgb(r,g,b) _rgb(r,g,b)
 
 struct windowData {
     int x;
@@ -20,7 +32,51 @@ struct windowData {
 
     bool fullscreen;
 };
+#pragma endregion
 
+#pragma region Renderer
+class Renderer {
+public:
+    struct {
+        int startx = 0;
+        int starty = 0;
+        int width = 0;
+        int height = 0;
+
+        unsigned char* data = {};
+    } display;
+
+    Renderer() {}
+
+    Renderer(rect disp, GLFWwindow* window) {
+        display.startx = (int)disp.start.x;
+        display.starty = (int)disp.start.y;
+        display.width = (int)disp.end.x;
+        display.height = (int)disp.end.y;
+    }
+
+    ~Renderer() {}
+
+    bool Init(GLFWwindow* window);
+
+    void Update(GLFWwindow* window);
+    void PostUpdate(GLFWwindow* window);
+
+    void DrawLine(v2 start, v2 end, rgb color, int point_size, double line_width);
+
+    void DrawBox(rect box, rgb color, bool fill);
+
+    void SetPixel(int x, int y, rgb color);
+    void SetPixel(int x, int y, uint8_t color[3]);
+    void ClearPixel(int x, int y);
+
+    void Clear();
+
+    void Resize(rect disp, GLFWwindow* window);
+};
+#pragma endregion
+
+#pragma region Window
 class Window {
 public:
     windowData windat = {
@@ -124,5 +180,22 @@ private:
         return true;
     }
 };
+#pragma endregion
 
-#endif //WINDOW_H
+#pragma region Shaders and Textures
+class Shader {
+public:
+    Shader() {}
+    Shader(const char* vertex_shader_text, const char* fragment_shader_text);
+
+    void Update();
+    void Render();
+
+protected:
+private:
+    GLuint vertex_shader, fragment_shader, program;
+    GLint mvp_location, vpos_location, vcol_location;
+};
+#pragma endregion
+
+#endif

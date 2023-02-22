@@ -1,67 +1,28 @@
 #ifndef MESH_H
 #define MESH_H
 
-//#include <GL/glew.h>
-
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
-//#include <GL/glew.h>
-#include <glm/glm.hpp>
-#include <string>
-#include <vector>
-#include "obj_loader.h"
+#include <linmath.h>
 
-
-struct Vertex
-{
-public:
-	Vertex(const glm::vec3& pos, const glm::vec2& texCoord, const glm::vec3& normal)
-	{
-		this->pos = pos;
-		this->texCoord = texCoord;
-		this->normal = normal;
-	}
-
-	glm::vec3* GetPos() { return &pos; }
-	glm::vec2* GetTexCoord() { return &texCoord; }
-	glm::vec3* GetNormal() { return &normal; }
-
-private:
-	glm::vec3 pos;
-	glm::vec2 texCoord;
-	glm::vec3 normal;
+struct Vertex {
+    float x, y;
+    float r, g, b;
 };
 
-enum MeshBufferPositions
-{
-	POSITION_VB,
-	TEXCOORD_VB,
-	NORMAL_VB,
-	INDEX_VB
-};
-
-class Mesh
-{
+class Mesh {
 public:
-    Mesh(const std::string& fileName);
-	Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
+    Vertex *vertices;
+    Mesh() {}
+    Mesh(Vertex *vert);
 
-	void Render();
-
-	virtual ~Mesh();
+    void Render();
+    void Update(double time, float ratio, GLint j);
 protected:
 private:
-	static const unsigned int NUM_BUFFERS = 4;
-	void operator=(const Mesh& mesh) {}
-	Mesh(const Mesh& mesh) {}
-
-    void InitMesh(const IndexedModel& model);
-
-	GLuint m_vertexArrayObject;
-	GLuint m_vertexArrayBuffers[NUM_BUFFERS];
-	unsigned int m_numIndices;
+    GLuint vertex_buffer;
 };
 
 #endif
