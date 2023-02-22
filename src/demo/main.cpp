@@ -31,19 +31,7 @@ static const char* fragment_shader_text =
 
 class nDemo : public Window {
 public:
-	/*Vertex vertices[3] = {
-		{ -0.6f, -0.4f, 1.f, 0.f, 0.f },
-		{  0.6f, -0.4f, 0.f, 1.f, 0.f },
-		{   0.f,  0.6f, 0.f, 0.f, 1.f }
-	};*/
-	Vertex vertices[4] = {
-		{ -1.0f, -1.0f, 1.f, 0.f, 0.f },
-		{  1.0f, -1.0f, 0.f, 1.f, 0.f },
-		{  1.0f,  1.0f, 0.f, 0.f, 1.f },
-		{ -1.0f,  1.0f, 0.f, 0.f, 1.f }
-	};
-	Mesh mesh;
-	Shader shader;
+
 	nDemo() {
 		
 	}
@@ -51,9 +39,7 @@ public:
 
 	nDemo(windowData dat) {windat = dat;}
 	void OnCreate() override {
-		//shader = Shader(vertex_shader_text, fragment_shader_text, vertices);
-
-		//mesh = Mesh(vertices);
+		
 	}
 
 	void OnDestroy() override {
@@ -76,8 +62,6 @@ public:
 	}
 
 	void Render() override {
-		shader.Render();
-		mesh.Render();
 	}
 };
 
