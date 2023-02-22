@@ -23,5 +23,5 @@ jobs:
       run: cmake --build ${{github.workspace}}/build
       
     - name: Post-Build
-      run: make
+      run: cd build && make
 
