@@ -1,4 +1,4 @@
-#include <graphics/graphics.h>
+#include <graphics.h>
 
 #include <GL/glew.h>
 #include <iostream>

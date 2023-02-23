@@ -4,7 +4,7 @@ FILE(GLOB SOURCES
 )
 
 set(FILES ${SOURCES})
-set(SUBDIRECTORIES "common;graphics;input;engine;math")
+set(SUBDIRECTORIES "common;engine")
 set(RELATIVE_PATH "src")
 
 #Add all subdirectories 

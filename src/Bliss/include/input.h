@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-#include "../math/math.h"
+#include "bliss_math.h"
 
 struct Keys {
     // Implement key library

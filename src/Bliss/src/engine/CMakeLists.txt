@@ -4,7 +4,7 @@ FILE(GLOB SOURCES
 )
 
 set(FILES ${SOURCES})
-set(SUBDIRECTORIES "world")
+set(SUBDIRECTORIES "")
 set(RELATIVE_PATH "src/engine")
 
 #Add all subdirectories 

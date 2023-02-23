@@ -3,8 +3,8 @@
 #ifndef PROGRAM_H
 #define PROGRAM_H
 
-#include "graphics/graphics.h"
-#include "input/input.h"
+#include "graphics.h"
+#include "input.h"
 
 #include "defines.h"
 

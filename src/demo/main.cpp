@@ -103,6 +103,7 @@ public:
 	}
 
 	void Render() override {
+		mesh->Render();
 		monkey->Render();
 	}
 };

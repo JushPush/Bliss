@@ -1,4 +1,4 @@
-#include <math/math.h>
+#include <bliss_math.h>
 
 v2 _v2(double x, double y) {
     return v2 {x,y};

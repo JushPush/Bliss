@@ -5,10 +5,10 @@
 
 #include <string>
 #include <GL/glew.h>
-#include "../engine/object.h"
+#include "engine/object.h"
 
-#include "../math/math.h"
-#include "../input/input.h"
+#include "bliss_math.h"
+#include "input.h"
 
 #pragma region Data stuff ig
 struct rgb {
