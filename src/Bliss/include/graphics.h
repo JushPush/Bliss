@@ -10,6 +10,8 @@
 #include "bliss_math.h"
 #include "input.h"
 
+#include "engine/asset.h"
+
 #pragma region Data stuff ig
 struct rgb {
     int r, g, b;
@@ -49,12 +51,12 @@ public:
 
     Renderer() {}
 
-    Renderer(rect disp, GLFWwindow* window) {
+    /*Renderer(rect disp, GLFWwindow* window) {
         display.startx = (int)disp.start.x;
         display.starty = (int)disp.start.y;
         display.width = (int)disp.end.x;
         display.height = (int)disp.end.y;
-    }
+    }*/
 
     ~Renderer() {}
 };
@@ -93,9 +95,11 @@ public:
 
     //virtual void KeyPress(int key, int scancode, int action, int mods) = 0;
 
-    virtual void Input() = 0;
+    virtual void Input(double time) = 0;
     virtual void Update(double time) = 0;
     virtual void Render() = 0;
+
+    void Close();
 
     void Destroy();
 
@@ -123,7 +127,7 @@ private:
     SDL_Renderer *renderer;
     SDL_GLContext glContext;
 
-    static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    /*static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
         Window* obj = (Window* )glfwGetWindowUserPointer(window);
         obj->input.inputs._keys[key] = (action == GLFW_PRESS);
     }
@@ -149,7 +153,7 @@ private:
     static void window_close_callback(GLFWwindow* window) {
         Window* obj = (Window* )glfwGetWindowUserPointer(window);
         obj->Destroy();
-    }
+    }*/
 
     bool begin_createWindow() {
         double width = 1.0 * this->windat.width;

@@ -53,6 +53,15 @@ private:
 };
 #pragma endregion
 
+class Object {
+public:
+	Object() {}
+
+	virtual void Input() = 0;
+	virtual void Update() = 0;
+	virtual void Render() = 0;
+};
+
 #pragma region Camera stuff
 struct Camera
 {
@@ -69,6 +78,16 @@ public:
 	inline glm::mat4 GetViewProjection() const
 	{
 		return projection * glm::lookAt(pos, pos + forward, up);
+	}
+
+	inline glm::vec3 GetPosition() const
+	{
+		return pos;
+	}
+
+	inline void SetPosition(glm::vec3 position) 
+	{
+		this->pos = position;
 	}
 
 	//void MoveForward(float amt)
