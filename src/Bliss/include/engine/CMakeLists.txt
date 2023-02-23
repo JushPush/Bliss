@@ -3,7 +3,7 @@ FILE(GLOB HEADS
 )
 
 set(FILES ${HEADS})
-set(SUBDIRECTORIES "world;core")
+set(SUBDIRECTORIES "")
 set(RELATIVE_PATH "include/engine")
 
 #Add all subdirectories 

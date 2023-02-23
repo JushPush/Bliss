@@ -1,7 +1,6 @@
 #include <engine/object.h>
 
-#include <engine/core/util.h>
-#include <engine/core/debugTimer.h>
+#include <engine/util.h>
 
 #include <fstream>
 #include <iostream>

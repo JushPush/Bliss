@@ -5,11 +5,10 @@
 
 #include <string>
 #include <GL/glew.h>
-#include "../engine/world/transform.h"
+#include "../engine/object.h"
 
 #include "../math/math.h"
 #include "../input/input.h"
-#include "../engine/core/error.h"
 
 #pragma region Data stuff ig
 struct rgb {
