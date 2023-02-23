@@ -1,5 +1,11 @@
 #include <graphics/graphics.h>
 
+#include <GL/glew.h>
+#include <iostream>
+#include <fstream>
+
+#include <stb_image.h>
+
 COLOR convertRGB(rgb _rgb_) {
     return COLOR {
         {
@@ -15,221 +21,256 @@ rgb _rgb(int red, int green, int blue) {
 }
 
 #pragma region Renderer
-void Renderer::DrawLine(v2 start, v2 end, rgb color, int point_size, double line_width) {
-	glPointSize(point_size);
-	glLineWidth(line_width); 
-	glColor3f((color.r / 255.0), (color.g / 255.0), (color.b / 255.0));
-	glBegin(GL_LINES);
-	glVertex3f(start.x, start.y,0.0);
-	glVertex3f(end.x,end.y,0.0);
-	glEnd();
-}
 
-bool Renderer::Init(GLFWwindow* window) {
-	Resize(rect(v2(this->display.startx,this->display.starty),v2(this->display.width,this->display.height)), window);
-	
-	return true;
-}
-
-void Renderer::Update(GLFWwindow* window) {
-	float ratio;
-    int width, height;
-
-    glfwGetFramebufferSize(window, &width, &height);
-    ratio = width / (float) height;
-
-    glViewport(0, 0, width, height);
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	//glPixelZoom(1.0, -1.0);
-	//glRasterPos2f(0.0, 0.0);
-	//glDrawPixels(this->display.width, this->display.height, GL_RGB, GL_UNSIGNED_BYTE, display.data);
-}
-
-void Renderer::PostUpdate(GLFWwindow* window) {
-	glfwSwapBuffers(window);
-    glfwPollEvents();
-}
-
-void Renderer::SetPixel(int x, int y, rgb color) {
-	COLOR _color = convertRGB(color);
-	int t = y * display.width * 3 + x * 3;
-
-	display.data[t ] = _color.bytes[0];
-	display.data[t + 1] = _color.bytes[1];
-	display.data[t + 2] = _color.bytes[2];
-}
-
-void Renderer::SetPixel(int x, int y, uint8_t color[3]) {
-	int t = y * display.width * 3 + x * 3;
-
-	display.data[t ] = color[0];
-	display.data[t + 1] = color[1];
-	display.data[t + 2] = color[2];
-}
-
-void Renderer::ClearPixel(int x, int y) {
-	int t = y * display.width * 3 + x * 3;
-
-	display.data[t ] = 0x00;
-	display.data[t + 1] = 0x00;
-	display.data[t + 2] = 0x00;
-}
-
-void Renderer::Clear() {
-	free(display.data);
-    display.data = new unsigned char[display.width * display.height * 3];
-
-	for (int y = 0; y < this->display.height; ++y) {
-		for (int x = 0; x < this->display.width; ++x) {
-			ClearPixel(x,y);
-		}
-	}
-}
-
-void Renderer::Resize(rect disp, GLFWwindow* window) {
-	display.startx = (int)disp.start.x;
-    display.starty = (int)disp.start.y;
-    display.width = (int)disp.end.x;
-    display.height = (int)disp.end.y;
-
-	Clear();
-
-	glViewport( 0, 0, this->display.width, this->display.height );
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-
-	glOrtho(0,this->display.width,this->display.height,0,-1.0,1.0);
-}
-
-void Renderer::DrawBox(rect box, rgb color, bool fill) {
-	for (int x = box.start.x; x < box.end.x; ++x) {
-		for (int y = box.start.y; y < box.end.y; ++y) {
-			SetPixel(x, y, color);
-		}
-	}
-}
 #pragma endregion
 
 #pragma region Window
 bool Window::Init() {
-    if (!glfwInit())
-    {
-        exit(EXIT_FAILURE);
-        // Initialization failed
-        return false;
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        std::cout << "ERROR: SDL failed to initialize" << std::endl << "SDL Error: " << SDL_GetError() << std::endl;
+        //return false; 
     }
 
-    glfwSetErrorCallback(error_callback);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE,32);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,16);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER,1);
 
-    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-    window = glfwCreateWindow(windat.width, windat.height, windat.title.c_str(), NULL, NULL);
-    if (!window)
-    {
-        // Window or OpenGL context creation failed
-        this->Destroy();
-        exit(EXIT_FAILURE);
-        return false;
+    window = SDL_CreateWindow(this->windat.title.c_str(), this->windat.x, this->windat.y, this->windat.width, this->windat.height, SDL_WINDOW_OPENGL);// glfwCreateWindow(windat.width, windat.height, windat.title.c_str(), NULL, NULL);
+    if (!window) {
+        std::cout << "ERROR: SDL failed to initialize" << std::endl << "SDL Error: " << SDL_GetError() << std::endl;
+        return false; }
+
+    glContext = SDL_GL_CreateContext(window);
+
+    GLenum res = glewInit();
+
+    if (res != GLEW_OK) {
+        std::cerr << "Glew failed to initialize!" << std::endl;
     }
 
-    glfwSetWindowUserPointer(window, this);
+    glEnable(GL_DEPTH_TEST);
 
-    glfwSetKeyCallback(window, key_callback);
-    glfwSetCursorPosCallback(window, cursor_position_callback);
-    glfwSetMouseButtonCallback(window, mouse_button_callback);
-    glfwSetWindowSizeCallback(window, window_size_callback);
+    glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
 
-    begin_createWindow();
-
-    glfwMakeContextCurrent(window);
-    monitor = glfwGetPrimaryMonitor();
-
-    gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
-    gladLoadGL();
-    glfwSwapInterval(0);
-
-    renderer.Init(window);
-
+    /*renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        std::cout << "ERROR: SDL failed to initialize" << std::endl << "SDL Error: " << SDL_GetError() << std::endl;
+        return false; }*/
 
     this->OnCreate();
 
-    double previousTime = glfwGetTime();
-    int frameCount = 0;
+    running = true;
 
-    while (!glfwWindowShouldClose(window))
+    float counter = 0.0f;
+
+    while (isRunning())
     {
-        glClearColor ( 0.0f, 0.0f, 0.0f, 1.0f );
-
-        double currentTime = glfwGetTime();
-        frameCount++;
-        // If a second has passed.
-        if ( currentTime - previousTime >= 1.0 )
-        {
-            // Display the frame count here any way you want.
-            std::cout << "Framerate: " << frameCount << " FPS" << std::endl;
-
-            frameCount = 0;
-            previousTime = currentTime;
+        SDL_Event event;
+        while(SDL_PollEvent(&event)) {
+            switch(event.type) {
+                case SDL_QUIT:
+                    running = false;
+                    break;
+                default:
+                    break;
+            }
         }
 
-        renderer.Update(window);
+        //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        //SDL_RenderClear(renderer);
 
-        double time = glfwGetTime();
+        this->Clear(0.0f, 0.0f, 0.0f, 1.0f);
+
+        float sinCounter = sinf(counter);
+        float absSinCounter = abs(sinCounter);
 
         this->Input();
 
-        this->Update(time);
+        this->Update(counter);
 
         this->Render();
 
-        renderer.PostUpdate(window);
+        this->SwapBuffers();
+        SDL_Delay(1);
+        counter += 0.01f;
+
+        //SDL_RenderPresent(renderer);
     }
 
     this->Destroy();
     return true;
 }
 
+Window::~Window() {
+    SDL_GL_DeleteContext(glContext);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
+}
+
+void Window::Clear(float r, float g, float b, float a) {
+    glClearColor(r, g, b, a);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
 void Window::Destroy() {
     this->OnDestroy();
-    glfwTerminate();
+    //glfwTerminate();
+}
+
+void Window::SwapBuffers()
+{
+	SDL_GL_SwapWindow(window);
 }
 #pragma endregion
 
 #pragma region Shaders and Textures
-Shader::Shader(const char* vertex_shader_text, const char* fragment_shader_text) {
-    vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertex_shader, 1, &vertex_shader_text, NULL);
-    glCompileShader(vertex_shader);
+Shader::Shader(const std::string& fileName)
+{
+	m_program = glCreateProgram();
+	m_shaders[0] = CreateShader(LoadShader(fileName + ".vs"), GL_VERTEX_SHADER);
+	m_shaders[1] = CreateShader(LoadShader(fileName + ".fs"), GL_FRAGMENT_SHADER);
 
-    fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragment_shader, 1, &fragment_shader_text, NULL);
-    glCompileShader(fragment_shader);
+	for(unsigned int i = 0; i < NUM_SHADERS; i++)
+		glAttachShader(m_program, m_shaders[i]);
 
-    program = glCreateProgram();
-    glAttachShader(program, vertex_shader);
-    glAttachShader(program, fragment_shader);
-    glLinkProgram(program);
+	glBindAttribLocation(m_program, 0, "position");
+	glBindAttribLocation(m_program, 1, "texCoord");
+	glBindAttribLocation(m_program, 2, "normal");
 
-    mvp_location = glGetUniformLocation(program, "MVP");
-	vpos_location = glGetAttribLocation(program, "vPos");
-	vcol_location = glGetAttribLocation(program, "vCol");
+	glLinkProgram(m_program);
+	CheckShaderError(m_program, GL_LINK_STATUS, true, "Error linking shader program");
 
-    glEnableVertexAttribArray(vpos_location);
-    //glVertexAttribPointer(vpos_location, 2, GL_FLOAT, GL_FALSE,
-    //                    sizeof(vertices[0]), (void*) 0);
-    glEnableVertexAttribArray(vcol_location);
-    //glVertexAttribPointer(vcol_location, 3, GL_FLOAT, GL_FALSE,
-    //                    sizeof(vertices[0]), (void*) (sizeof(float) * 2));
+	glValidateProgram(m_program);
+	CheckShaderError(m_program, GL_LINK_STATUS, true, "Invalid shader program");
+
+	m_uniforms[0] = glGetUniformLocation(m_program, "MVP");
+	m_uniforms[1] = glGetUniformLocation(m_program, "Normal");
+	m_uniforms[2] = glGetUniformLocation(m_program, "lightDirection");
 }
 
-void Shader::Update() {
-    glUseProgram(program);
+Shader::~Shader()
+{
+	for(unsigned int i = 0; i < NUM_SHADERS; i++)
+    {
+        glDetachShader(m_program, m_shaders[i]);
+        glDeleteShader(m_shaders[i]);
+    }
+
+	glDeleteProgram(m_program);
 }
 
-void Shader::Render() {
+void Shader::Bind()
+{
+	glUseProgram(m_program);
+}
 
+void Shader::Update(const Transform& transform, const Camera& camera)
+{
+	glm::mat4 MVP = transform.GetMVP(camera);
+	glm::mat4 Normal = transform.GetModel();
+
+	glUniformMatrix4fv(m_uniforms[0], 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(m_uniforms[1], 1, GL_FALSE, &Normal[0][0]);
+	glUniform3f(m_uniforms[2], 0.0f, 0.0f, 1.0f);
+}
+
+std::string Shader::LoadShader(const std::string& fileName)
+{
+    std::ifstream file;
+    file.open((fileName).c_str());
+
+    std::string output;
+    std::string line;
+
+    if(file.is_open())
+    {
+        while(file.good())
+        {
+            getline(file, line);
+			output.append(line + "\n");
+        }
+    }
+    else
+    {
+		std::cerr << "Unable to load shader: " << fileName << std::endl;
+    }
+
+    return output;
+}
+
+void Shader::CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage)
+{
+    GLint success = 0;
+    GLchar error[1024] = { 0 };
+
+    if(isProgram)
+        glGetProgramiv(shader, flag, &success);
+    else
+        glGetShaderiv(shader, flag, &success);
+
+    if(success == GL_FALSE)
+    {
+        if(isProgram)
+            glGetProgramInfoLog(shader, sizeof(error), NULL, error);
+        else
+            glGetShaderInfoLog(shader, sizeof(error), NULL, error);
+
+        std::cerr << errorMessage << ": '" << error << "'" << std::endl;
+    }
+}
+
+GLuint Shader::CreateShader(const std::string& text, unsigned int type)
+{
+    GLuint shader = glCreateShader(type);
+
+    if(shader == 0)
+		std::cerr << "Error compiling shader type " << type << std::endl;
+
+    const GLchar* p[1];
+    p[0] = text.c_str();
+    GLint lengths[1];
+    lengths[0] = text.length();
+
+    glShaderSource(shader, 1, p, lengths);
+    glCompileShader(shader);
+
+    CheckShaderError(shader, GL_COMPILE_STATUS, false, "Error compiling shader!");
+
+    return shader;
+}
+
+Texture::Texture(const std::string& fileName)
+{
+	int width, height, numComponents;
+    unsigned char* data = stbi_load((fileName).c_str(), &width, &height, &numComponents, 4);
+
+    if(data == NULL)
+		std::cerr << "Unable to load texture: " << fileName << std::endl;
+        
+    glGenTextures(1, &m_texture);
+    glBindTexture(GL_TEXTURE_2D, m_texture);
+        
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+        
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+    stbi_image_free(data);
+}
+
+Texture::~Texture()
+{
+	glDeleteTextures(1, &m_texture);
+}
+
+void Texture::Bind()
+{
+	glBindTexture(GL_TEXTURE_2D, m_texture);
 }
 #pragma endregion

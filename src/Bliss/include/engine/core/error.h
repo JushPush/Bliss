@@ -1,7 +1,7 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include "../../system/console/logger.h"
+#include "../../logger.h"
 
 static void error_callback(int error, const char* description) {
     std::cout << "ERROR " << error << " : " << description << std::endl;

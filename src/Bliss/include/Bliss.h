@@ -5,12 +5,15 @@
 #define BLISS_VERSION_NUM    001
 
 #include <iostream>
-#include "program.h"
-
 // Engine
 #include "engine/engine.h"
 
+#include "program.h"
+
+#include "engine/world/camera.h"
+#include "engine/world/transform.h"
+
 // Debug
-#include "system/console/logger.h"
+#include "logger.h"
 
 #endif

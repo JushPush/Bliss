@@ -1,9 +1,11 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
+#include <SDL2/SDL.h>
+
+#include <string>
+#include <GL/glew.h>
+#include "../engine/world/transform.h"
 
 #include "../math/math.h"
 #include "../input/input.h"
@@ -56,23 +58,6 @@ public:
     }
 
     ~Renderer() {}
-
-    bool Init(GLFWwindow* window);
-
-    void Update(GLFWwindow* window);
-    void PostUpdate(GLFWwindow* window);
-
-    void DrawLine(v2 start, v2 end, rgb color, int point_size, double line_width);
-
-    void DrawBox(rect box, rgb color, bool fill);
-
-    void SetPixel(int x, int y, rgb color);
-    void SetPixel(int x, int y, uint8_t color[3]);
-    void ClearPixel(int x, int y);
-
-    void Clear();
-
-    void Resize(rect disp, GLFWwindow* window);
 };
 #pragma endregion
 
@@ -85,7 +70,6 @@ public:
         "",
         false
     };
-    Renderer renderer;
     INPUT input;
 
     struct {
@@ -99,10 +83,7 @@ public:
         windat = wdat;
     }
 
-    ~Window() 
-    {
-        Destroy();
-    }
+    virtual ~Window();
 
     void Setup(windowData wdat) { windat = wdat; }
 
@@ -119,7 +100,10 @@ public:
 
     void Destroy();
 
-    GLFWwindow* getWindow() {
+    void Clear(float r, float g, float b, float a);
+	void SwapBuffers();
+
+    SDL_Window* getWindow() {
         return window;
     }
 
@@ -129,19 +113,16 @@ public:
         windat.width = width;
         windat.height = height;
 
-        renderer.Resize(
-            rect(
-                v2(0,0),
-                v2(width,height)
-            ), window
-        ); 
-
         OnResize(width,height);
     }
-private:
-    GLFWwindow* window;
 
-    GLFWmonitor* monitor;
+    bool isRunning() { return running; }
+private:
+    bool running = false;
+
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    SDL_GLContext glContext;
 
     static void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods) {
         Window* obj = (Window* )glfwGetWindowUserPointer(window);
@@ -175,26 +156,48 @@ private:
         double width = 1.0 * this->windat.width;
         double height = 1.0 * this->windat.height;
 
-        renderer = Renderer(rect(v2(0.0,0.0),v2(width,height)), window);
-
         return true;
     }
 };
 #pragma endregion
 
 #pragma region Shaders and Textures
-class Shader {
+class Shader
+{
 public:
     Shader() {}
-    Shader(const char* vertex_shader_text, const char* fragment_shader_text);
+	Shader(const std::string& fileName);
 
-    void Update();
-    void Render();
+	void Bind();
+	void Update(const Transform& transform, const Camera& camera);
 
+	virtual ~Shader();
 protected:
 private:
-    GLuint vertex_shader, fragment_shader, program;
-    GLint mvp_location, vpos_location, vcol_location;
+	static const unsigned int NUM_SHADERS = 2;
+	static const unsigned int NUM_UNIFORMS = 3;
+
+	std::string LoadShader(const std::string& fileName);
+	void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);
+	GLuint CreateShader(const std::string& text, unsigned int type);
+
+	GLuint m_program;
+	GLuint m_shaders[NUM_SHADERS];
+	GLuint m_uniforms[NUM_UNIFORMS];
+};
+
+class Texture
+{
+public:
+    Texture() {}
+	Texture(const std::string& fileName);
+
+	void Bind();
+
+	virtual ~Texture();
+protected:
+private:
+	GLuint m_texture;
 };
 #pragma endregion
 

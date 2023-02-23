@@ -1,7 +1,7 @@
 # Bliss Engine
 [![CMake](https://github.com/EinKara/Bliss/actions/workflows/cmake.yml/badge.svg)](https://github.com/EinKara/Bliss/actions/workflows/cmake.yml)
 
-User-Friendly and Open Source software engine with GLFW implementation.
+User-Friendly, Cross-Platform, and Open Source software engine built on GLFW (BEING MOVED TO SDL2)
 
 ## Requirements
 
