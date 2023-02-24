@@ -11,12 +11,11 @@ windowData data = {
 
 class nDemo : public Window {
 public:
-	Mesh* mesh;
-	Mesh* monkey;
-	Shader* shader;
-	Texture* texture;
-	Transform transform;
+	Shader* shaderProgram;
+	Shader* skyboxShader;
 	Camera camera;
+
+	Skybox* _skybox;
 
 	nDemo() {
 		
@@ -24,17 +23,26 @@ public:
 
 	nDemo(windowData dat) {windat = dat;}
 	void OnCreate() override {
+		shaderProgram = new Shader("./res/basicShader.vs", "./res/basicShader.fs");
+		skyboxShader = new Shader("./res/skybox/skybox.vs", "./res/skybox/skybox.fs");
+		
+		shaderProgram->Activate();
+		skyboxShader->Activate();
+		
+		/*_skybox = new Skybox();
+		_skybox->Init();
 		monkey = new Mesh("./res/teapot.obj");
+		skybox = new Shader("./res/skybox/skybox");
 		shader = new Shader("./res/basicShader");
-		texture = new Texture("./res/bricks.jpg");
-		camera = Camera(glm::vec3(0.0f, 0.0f, -5.0f), 70.0f, (float)this->windat.width/(float)this->windat.height, 0.1f, 100.0f);
+		texture = new Texture("./res/bricks.jpg");*/
+		//camera = Camera(glm::vec3(0.0f, 0.0f, -5.0f), 70.0f, (float)this->windat.width/(float)this->windat.height, 0.1f, 100.0f);
 	}
 
 	void OnDestroy() override {
 	}
 
 	void Input(double time) override {
-		if (input.isKeyPressed(KeyboardKey::KEY_ESCAPE))
+		/*if (input.isKeyPressed(KeyboardKey::KEY_ESCAPE))
 			this->Close();
 		
 		if (input.isKeyPressed(KeyboardKey::KEY_W)) {
@@ -66,23 +74,26 @@ public:
 			glm::vec3 pos = camera.GetPosition();
 			pos.y -= 0.1;
 			camera.SetPosition(pos);
-		}
+		}*/
 	}
 
 	void Update(double time) override {
 		float ratio;
         int width, height;
 
-		transform.GetRot()->y = time * 0.25;
+		//transform.GetRot()->y = time * 0.25;
 
-		shader->Bind();
-		texture->Bind();
-		shader->Update(transform, camera);
+		//skybox->Bind();
+		//shader->Bind();
+		//skybox->Update(transform, camera);
+		//texture->Bind();
+		//shader->Update(transform, camera);
 	}
 
 	void Render() override {
 		//objectManager->Render();
-		monkey->Render();
+		//_skybox->Render();
+		//monkey->Render();
 	}
 };
 

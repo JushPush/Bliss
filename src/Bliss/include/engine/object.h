@@ -93,25 +93,4 @@ enum MeshBufferPositions
 	INDEX_VB
 };
 
-class Mesh {
-public:
-    Mesh() {}
-    Mesh(const std::string& fileName);
-    Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
-
-    void Render();
-
-    virtual ~Mesh();
-protected:
-private:
-    static const unsigned int NUM_BUFFERS = 4;
-
-    void InitMesh(const IndexedModel& model);
-
-	GLuint m_vertexArrayObject;
-	GLuint m_vertexArrayBuffers[NUM_BUFFERS];
-	unsigned int m_numIndices;
-    unsigned int *indices;
-};
-
 #endif

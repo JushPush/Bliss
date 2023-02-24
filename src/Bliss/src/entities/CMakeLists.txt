@@ -4,8 +4,8 @@ FILE(GLOB SOURCES
 )
 
 set(FILES ${SOURCES})
-set(SUBDIRECTORIES "common;engine;renderer;assets;entities")
-set(RELATIVE_PATH "src")
+set(SUBDIRECTORIES "")
+set(RELATIVE_PATH "src/entities")
 
 #Add all subdirectories 
 foreach(VAR ${SUBDIRECTORIES})

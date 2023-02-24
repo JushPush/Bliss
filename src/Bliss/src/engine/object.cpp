@@ -410,7 +410,7 @@ static inline std::vector<std::string> SplitString(const std::string &s, char de
 }
 #pragma endregion
 
-Mesh::Mesh(const std::string& fileName)
+/*Mesh::Mesh(const std::string& fileName)
 {
     InitMesh(OBJModel(fileName).ToIndexedModel());
 }
@@ -476,4 +476,4 @@ void Mesh::Render()
 	//glDrawElementsBaseVertex(GL_TRIANGLES, m_numIndices, GL_UNSIGNED_INT, 0, 0);
 
 	glBindVertexArray(0);
-}
+}*/
