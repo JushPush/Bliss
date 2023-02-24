@@ -34,9 +34,7 @@ struct _program {
     void* audio;
 
     _program() {
-        previousTime = glfwGetTime();
-        //glfwSetKeyCallback(window[0]->getWindow(), key_callback);
-        //d_log("test", LogType::Error);
+        
     };
 } program;
 

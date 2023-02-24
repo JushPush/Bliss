@@ -62,3 +62,8 @@ int main() {
 ```
 
 This will display a window.
+
+## Libraries Used
+
+| Library |
+| ------- |

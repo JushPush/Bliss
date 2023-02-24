@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Default Options
+BUILD_DIR="build"
+CMAKE_GENERATOR="Unix Makefiles"
+BUILD_TYPE="Release"
+CMAKE_OPTIONS="$CMAKE_OPTIONS"
+
+# Setup Build Environment / Install Requirements
+sudo apt-get install -y libasio-dev libsdl2-dev libsdl2-gfx-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev

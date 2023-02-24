@@ -31,6 +31,10 @@ bool Window::Init() {
         //return false; 
     }
 
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 3 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE );
+
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
@@ -73,6 +77,12 @@ bool Window::Init() {
         SDL_Event event;
         while(SDL_PollEvent(&event)) {
             switch(event.type) {
+                case SDL_KEYDOWN:
+                    input.inputs._keys[event.key.keysym.scancode] = true;
+                    break;
+                case SDL_KEYUP:
+                    input.inputs._keys[event.key.keysym.scancode] = false;
+                    break;
                 case SDL_QUIT:
                     running = false;
                     break;
@@ -89,7 +99,7 @@ bool Window::Init() {
         float sinCounter = sinf(counter);
         float absSinCounter = abs(sinCounter);
 
-        this->Input();
+        this->Input(counter);
 
         this->Update(counter);
 
@@ -115,6 +125,10 @@ Window::~Window() {
 void Window::Clear(float r, float g, float b, float a) {
     glClearColor(r, g, b, a);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void Window::Close() {
+    this->running = false;
 }
 
 void Window::Destroy() {
