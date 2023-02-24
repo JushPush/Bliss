@@ -11,7 +11,6 @@ windowData data = {
 
 class nDemo : public Window {
 public:
-	//ObjectManager* objectManager;
 	Mesh* mesh;
 	Mesh* monkey;
 	Shader* shader;
@@ -25,13 +24,10 @@ public:
 
 	nDemo(windowData dat) {windat = dat;}
 	void OnCreate() override {
-		//objectManager = new ObjectManager();
-		monkey = new Mesh("./res/monkey3.obj");
+		monkey = new Mesh("./res/teapot.obj");
 		shader = new Shader("./res/basicShader");
 		texture = new Texture("./res/bricks.jpg");
 		camera = Camera(glm::vec3(0.0f, 0.0f, -5.0f), 70.0f, (float)this->windat.width/(float)this->windat.height, 0.1f, 100.0f);
-
-		//objectManager->objects.push_back(monkey);
 	}
 
 	void OnDestroy() override {
@@ -59,6 +55,16 @@ public:
 		if (input.isKeyPressed(KeyboardKey::KEY_D)) {
 			glm::vec3 pos = camera.GetPosition();
 			pos.x -= 0.1;
+			camera.SetPosition(pos);
+		}
+		if (input.isKeyPressed(KeyboardKey::KEY_UP)) {
+			glm::vec3 pos = camera.GetPosition();
+			pos.y += 0.1;
+			camera.SetPosition(pos);
+		}
+		if (input.isKeyPressed(KeyboardKey::KEY_DOWN)) {
+			glm::vec3 pos = camera.GetPosition();
+			pos.y -= 0.1;
 			camera.SetPosition(pos);
 		}
 	}
