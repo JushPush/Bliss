@@ -32,8 +32,8 @@ struct Mesh {
     unsigned int *indices = 0;
 };
 
-Mesh* CreateMesh(const std::string& fileName);
+Mesh CreateMesh(const std::string& fileName);
 Mesh CreateMesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
 
-void InitMesh(Mesh* mesh, const IndexedModel& model);
+void InitMesh(Mesh& mesh, const IndexedModel& model);
 void RenderMesh(Mesh& mesh);

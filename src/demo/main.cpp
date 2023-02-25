@@ -8,7 +8,7 @@ int main() {
 	demoWindow = CreateWindow(0,0,800,600,"Bliss Demo Window (DOD Build)", false);
 	InitWindow(demoWindow);
 
-	Mesh* testMesh = CreateMesh("./res/teapot.obj");
+	Mesh testMesh = CreateMesh("./res/teapot.obj");
 	Shader shader = CreateShader("./res/basicShader");
 	Texture texture = CreateTexture("./res/bricks.jpg");
 	Camera camera = CreateCamera(glm::vec3(0.0f, 0.0f, -5.0f), 70.0f, (float)demoWindow.width/(float)demoWindow.height, 0.1f, 100.0f);
@@ -51,7 +51,7 @@ int main() {
 
 		UpdateShader(shader, transform, camera);
 
-		RenderMesh(*testMesh);
+		RenderMesh(testMesh);
 
 		SwapBuffers(demoWindow);
 

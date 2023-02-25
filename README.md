@@ -25,7 +25,7 @@ Assuming the build directory has not been modified...
 $ cmake --build build
 ```
 
-Building will generate a demo executable, located in build/bin.
+Building will generate a demo executable, located in build/bin. 
 
 ## Using
 
