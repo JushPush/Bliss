@@ -3,7 +3,7 @@ FILE(GLOB HEADS
 )
 
 set(FILES ${HEADS})
-set(SUBDIRECTORIES "engine")
+set(SUBDIRECTORIES "engine;assets;entities;renderer")
 set(RELATIVE_PATH "include")
 
 #Add all subdirectories 

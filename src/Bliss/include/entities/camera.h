@@ -1,10 +1,21 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#pragma once
 
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
 struct Camera
+{
+	/* data */
+	glm::vec3 pos;
+	glm::vec3 forward;
+	glm::vec3 up;
+	glm::mat4 projection;
+};
+
+Camera CreateCamera(const glm::vec3& pos, float fov, float aspect, float zNear, float zFar);
+glm::mat4 GetViewProjection(const Camera& camera);
+
+/*struct Camera
 {
 public:
 	Camera() {}
@@ -65,7 +76,7 @@ private:
 	glm::vec3 pos;
 	glm::vec3 forward;
 	glm::vec3 up;
-};
+};*/
 
 struct Transform
 {
@@ -91,7 +102,7 @@ public:
 
 	inline glm::mat4 GetMVP(const Camera& camera) const
 	{
-		glm::mat4 VP = camera.GetViewProjection();
+		glm::mat4 VP = GetViewProjection(camera);
 		glm::mat4 M = GetModel();
 
 		return VP * M;//camera.GetViewProjection() * GetModel();
@@ -110,5 +121,3 @@ private:
 	glm::vec3 rot;
 	glm::vec3 scale;
 };
-
-#endif

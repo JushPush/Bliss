@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "Currently, the DEMO executable can only be executed from here"
+echo ""
+
+./build/bin/DEMO

@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>            // SDL2
 
 #include "bliss_math.h"
+#include "renderer/window.h"
 
 #pragma region KEYS
 
@@ -274,8 +275,21 @@ enum MouseButton
 
 #pragma endregion
 
+struct Input {
+	bool keys[KEYBOARD_SIZE] = {};
+	// bool mouse_buttons[GLFW_MOUSE_BUTTON_LAST] = {};
 
-struct INPUT {
+	struct {
+		double x;
+		double y;
+	} mouse;
+};
+
+bool isKeyPressed(int key);
+
+extern Input input;
+
+/*struct INPUT {
     struct {
         bool _keys[KEYBOARD_SIZE] = {};
         //bool _mouse_buttons[GLFW_MOUSE_BUTTON_LAST] = {};
@@ -294,14 +308,14 @@ struct INPUT {
         return inputs._keys[key];
     }
 
-    /*bool isMouseButtonPressed(int button) {
+    bool isMouseButtonPressed(int button) {
         return inputs._mouse_buttons[button];
     }
 
     const char* getKeyName(int key) {
         return glfwGetKeyName(key, 0);
-    }*/
-};
+    }
+};*/
 
 #pragma region Input Callbacks
 
