@@ -1,11 +1,10 @@
-FILE(GLOB SOURCES
-    *.cpp
-	*.c
+FILE(GLOB HEADS
+    *.h
 )
 
-set(FILES ${SOURCES})
-set(SUBDIRECTORIES "common;renderer;assets;entities")
-set(RELATIVE_PATH "src")
+set(FILES ${HEADS})
+set(SUBDIRECTORIES "")
+set(RELATIVE_PATH "include/entities")
 
 #Add all subdirectories 
 foreach(VAR ${SUBDIRECTORIES})

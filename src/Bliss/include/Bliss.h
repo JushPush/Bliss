@@ -6,9 +6,14 @@
 
 #include <iostream>
 // Engine
-#include "engine/engine.h"
+//#include "engine/engine.h"
 
-#include "program.h"
+//#include "program.h"
+#include "renderer/window.h"
+#include "assets/mesh.h"
+#include "assets/texture.h"
+
+#include "assets/shader.h"
 
 // Debug
 #include "logger.h"

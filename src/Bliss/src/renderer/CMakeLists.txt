@@ -5,7 +5,7 @@ FILE(GLOB SOURCES
 
 set(FILES ${SOURCES})
 set(SUBDIRECTORIES "")
-set(RELATIVE_PATH "src/engine")
+set(RELATIVE_PATH "src/renderer")
 
 #Add all subdirectories 
 foreach(VAR ${SUBDIRECTORIES})
