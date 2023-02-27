@@ -14,6 +14,8 @@ struct Window {
     std::string title;
     bool fullscreen;
 
+    bool resizable = true;
+
     // Super cool and fun stuff
     bool minimized = false;
 

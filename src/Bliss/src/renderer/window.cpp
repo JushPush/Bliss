@@ -1,5 +1,7 @@
 #include <renderer/window.h>
 
+#include <SDL2/SDL_ttf.h>
+
 Window CreateWindow(int x, int y, int width, int height, std::string title, bool fullscreen) {
     return Window {
         x, y, width, height, title, fullscreen
@@ -29,6 +31,11 @@ bool InitWindow(Window& window) {
         std::cout << "ERROR: SDL failed to initialize" << std::endl << "SDL Error: " << SDL_GetError() << std::endl;
         return false; 
     }
+    /*window.renderer = SDL_CreateRenderer( window.window, -1, SDL_RENDERER_ACCELERATED );
+    if (!window.renderer) {
+        std::cout << "ERROR: SDL failed to initialize" << std::endl << "SDL Error: " << SDL_GetError() << std::endl;
+        return false; 
+    }*/
 
     window.running = true;
 
@@ -90,8 +97,6 @@ void CullEvent(Window& window) {
                 window.mouseMove = true;
                 input.mouse.x = (float)event.motion.x - window.width / 2;
                 input.mouse.y = (float)event.motion.y - window.height / 2;
-                input.mouse.yaw = clampYaw(input.mouse.yaw + 0.001 * input.mouse.x);
-			    input.mouse.pitch = clampPitch(input.mouse.pitch - 0.001 * input.mouse.y);
                 break;
             case SDL_QUIT:
                 window.running = false;

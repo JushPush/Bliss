@@ -9,7 +9,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/transform.hpp>
 
-#include "../entities/camera.h"
+#include "../entities/transform.h"
 #include "asset.h"
 
 static const unsigned int S_NUM_SHADERS = 2;
@@ -22,6 +22,8 @@ public:
     GLuint shaders[S_NUM_SHADERS];
     GLuint uniforms[S_NUM_UNIFORMS];
 
+    Shader() {}
+
     Shader(const std::string& fileName);
 
     void Bind();
@@ -33,5 +35,5 @@ public:
 
 GLuint GLCreateShader(const std::string& text, unsigned int type);
 
-std::string LoadShader(const std::string& fileName);
+std::string LoadShaderSRC(const std::string& fileName);
 void CheckShaderError(GLuint shader, GLuint flag, bool isProgram, const std::string& errorMessage);

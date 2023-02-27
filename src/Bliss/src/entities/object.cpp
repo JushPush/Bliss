@@ -10,7 +10,7 @@ void Object::SetShader(Shader shader) {}
 void Object::SetTexture(Texture texture) {}
 void Object::SetMesh(Mesh mesh) {}
 
-void Object::Update() 
+/*void Object::Update() 
 {
     _shader.Bind();
     // _shader.Update(transform, camera);
@@ -18,4 +18,4 @@ void Object::Update()
 void Object::Render() 
 {
 
-}
+}*/

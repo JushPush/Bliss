@@ -34,6 +34,8 @@ public:
     unsigned int numIndices;
     unsigned int *indices;
 
+    Mesh() {}
+
     Mesh(const std::string& fileName);
     Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
 
