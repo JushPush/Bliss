@@ -1,19 +1,49 @@
 #include <Bliss.h>
 
+glm::vec3 polarVector(float p, float y)
+{
+    // this form is already normalized
+    return glm::vec3(std::cos(y) * std::cos(p),
+                     std::sin(p),
+                     std::sin(y) * std::cos(p));
+}
+
+
+
 Window demoWindow;
 
+// TODO: MAKE TRANSFORM INDEPENDENT FROM CAMERA! Once everything is binded to a single object, everything will be easier.
+
 Transform transform;
+
+
 
 int main() {
 	demoWindow = CreateWindow(0,0,800,600,"Bliss Demo Window (DOD Build)", false);
 	InitWindow(demoWindow);
 
-	Mesh testMesh = CreateMesh("./res/teapot.obj");
-	Shader shader = CreateShader("./res/basicShader");
-	Texture texture = CreateTexture("./res/bricks.jpg");
+	SDL_SetRelativeMouseMode(SDL_FALSE);
+
+	SDL_WarpMouseInWindow(demoWindow.window, demoWindow.width / 2, demoWindow.height / 2);
+
+
+	Mesh testMesh("./res/teapot.obj");
+
+	Shader shader("./res/basicShader");
+	Shader skyboxShader("./res/skybox/skybox");
+
+	Texture texture("./res/bricks.jpg");
 	Camera camera = CreateCamera(glm::vec3(0.0f, 0.0f, -5.0f), 70.0f, (float)demoWindow.width/(float)demoWindow.height, 0.1f, 100.0f);
 
+	Skybox skybox = CreateSkybox();
+	InitSkybox(skybox);
 
+	#define RESET_MOUSE SDL_WarpMouseInWindow(demoWindow.window, demoWindow.width / 2, demoWindow.height / 2);
+
+	const float sensitivity = 0.001f; 
+
+	RESET_MOUSE
+	
 	float counter = 0.0f;
 
 	while (demoWindow.running) {
@@ -42,24 +72,34 @@ int main() {
 			camera.pos.y -= 0.1;
 		}
 
+		if (demoWindow.mouseMove) {
+			//RESET_MOUSE
+		}
+
+		//camera.forward = polarVector(glm::radians(input.mouse.pitch), glm::radians(input.mouse.yaw));
+
 		ClearWindow(demoWindow, 1.0, 1.0, 1.0, 1.0);
 
 		transform.GetRot()->y = counter * 0.25;
 
-		BindShader(shader);
-		BindTexture(texture);
+		shader.Bind();
+		texture.Bind();
+		shader.Update(transform, camera);
+		testMesh.Render();
 
-		UpdateShader(shader, transform, camera);
-
-		RenderMesh(testMesh);
+		skyboxShader.Bind();
+		skyboxShader.Update(transform, camera);
+		RenderSkybox(skybox);
 
 		SwapBuffers(demoWindow);
+		//
 
 		counter += 0.01f;
 	}
 
-	DeleteShader(shader);
-	DeleteTexture(texture);
+	shader.Unload();
+	skyboxShader.Unload();
+	texture.Unload();
 
 	DestroyWindow(demoWindow);
 

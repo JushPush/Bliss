@@ -19,6 +19,8 @@ struct Window {
 
     bool running = true;
 
+    bool mouseMove = false;
+
     SDL_Window *window = 0;
     SDL_Renderer *renderer = 0;
     SDL_GLContext glContext = 0;

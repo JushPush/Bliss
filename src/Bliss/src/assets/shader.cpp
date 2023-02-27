@@ -2,31 +2,54 @@
 
 #include <stb_image.h>
 
-Shader CreateShader(const std::string& path)
+Shader::Shader(const std::string& fileName)
 {
-    Shader shader = Shader();
-    shader.program = glCreateProgram();
-	shader.shaders[0] = GLCreateShader(LoadShader(path + ".vs"), GL_VERTEX_SHADER);
-	shader.shaders[1] = GLCreateShader(LoadShader(path + ".fs"), GL_FRAGMENT_SHADER);
+    program = glCreateProgram();
+	shaders[0] = GLCreateShader(LoadShader(fileName + ".vs"), GL_VERTEX_SHADER);
+	shaders[1] = GLCreateShader(LoadShader(fileName + ".fs"), GL_FRAGMENT_SHADER);
 
 	for(unsigned int i = 0; i < S_NUM_SHADERS; i++)
-		glAttachShader(shader.program, shader.shaders[i]);
+		glAttachShader(program, shaders[i]);
 
-	glBindAttribLocation(shader.program, 0, "position");
-	glBindAttribLocation(shader.program, 1, "texCoord");
-	glBindAttribLocation(shader.program, 2, "normal");
+	glBindAttribLocation(program, 0, "position");
+	glBindAttribLocation(program, 1, "texCoord");
+	glBindAttribLocation(program, 2, "normal");
 
-	glLinkProgram(shader.program);
-	CheckShaderError(shader.program, GL_LINK_STATUS, true, "Error linking shader program");
+	glLinkProgram(program);
+	CheckShaderError(program, GL_LINK_STATUS, true, "Error linking shader program");
 
-	glValidateProgram(shader.program);
-	CheckShaderError(shader.program, GL_LINK_STATUS, true, "Invalid shader program");
+	glValidateProgram(program);
+	CheckShaderError(program, GL_LINK_STATUS, true, "Invalid shader program");
 
-	shader.uniforms[0] = glGetUniformLocation(shader.program, "MVP");
-	shader.uniforms[1] = glGetUniformLocation(shader.program, "Normal");
-	shader.uniforms[2] = glGetUniformLocation(shader.program, "lightDirection");
+	uniforms[0] = glGetUniformLocation(program, "MVP");
+	uniforms[1] = glGetUniformLocation(program, "Normal");
+	uniforms[2] = glGetUniformLocation(program, "lightDirection");
+}
 
-    return shader;
+void Shader::Bind()
+{
+    glUseProgram(program);
+}
+
+void Shader::Update(const Transform& transform, const Camera& camera)
+{
+    glm::mat4 MVP = transform.GetMVP(camera);
+	glm::mat4 Normal = transform.GetModel();
+
+	glUniformMatrix4fv(uniforms[0], 1, GL_FALSE, &MVP[0][0]);
+	glUniformMatrix4fv(uniforms[1], 1, GL_FALSE, &Normal[0][0]);
+	glUniform3f(uniforms[2], 0.0f, 0.0f, 1.0f);
+}
+
+void Shader::Unload()
+{
+    for(unsigned int i = 0; i < S_NUM_SHADERS; i++)
+    {
+        glDetachShader(program, shaders[i]);
+        glDeleteShader(shaders[i]);
+    }
+
+	glDeleteProgram(program);
 }
 
 GLuint GLCreateShader(const std::string& text, unsigned int type)
@@ -49,30 +72,7 @@ GLuint GLCreateShader(const std::string& text, unsigned int type)
     return shader;
 }
 
-void BindShader(Shader& shader)
-{
-    glUseProgram(shader.program);
-}
-void UpdateShader(Shader& shader, const Transform& transform, const Camera& camera)
-{
-    glm::mat4 MVP = transform.GetMVP(camera);
-	glm::mat4 Normal = transform.GetModel();
 
-	glUniformMatrix4fv(shader.uniforms[0], 1, GL_FALSE, &MVP[0][0]);
-	glUniformMatrix4fv(shader.uniforms[1], 1, GL_FALSE, &Normal[0][0]);
-	glUniform3f(shader.uniforms[2], 0.0f, 0.0f, 1.0f);
-}
-
-void DeleteShader(Shader& shader)
-{
-    for(unsigned int i = 0; i < S_NUM_SHADERS; i++)
-    {
-        glDetachShader(shader.program, shader.shaders[i]);
-        glDeleteShader(shader.shaders[i]);
-    }
-
-	glDeleteProgram(shader.program);
-}
 
 std::string LoadShader(const std::string& fileName)
 {

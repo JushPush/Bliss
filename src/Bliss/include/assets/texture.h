@@ -6,13 +6,17 @@
 #include <string>
 #include <fstream>
 
-struct Texture
+#include "asset.h"
+
+class Texture : public Asset
 {
+public:
     GLuint texture;
+
+    Texture(const std::string& fileName);
+
+    void Init() {};
+    void Bind();
+    void Render() {};
+    void Unload();
 };
-
-Texture CreateTexture(const std::string& fileName);
-
-void BindTexture(Texture& texture);
-
-void DeleteTexture(Texture& texture);

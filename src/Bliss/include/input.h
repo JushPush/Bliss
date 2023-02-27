@@ -282,6 +282,9 @@ struct Input {
 	struct {
 		double x;
 		double y;
+
+		float pitch = 0.0f;
+		float yaw = 0.0f;
 	} mouse;
 };
 

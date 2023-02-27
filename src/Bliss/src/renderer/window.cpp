@@ -63,6 +63,19 @@ void ClearWindow(Window& window, float r, float g, float b, float a) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
+// clamp pitch to [-89, 89]
+float clampPitch(float p)
+{
+    return p > 89.0f ? 89.0f : (p < -89.0f ? -89.0f : p);   
+}
+
+// clamp yaw to [-180, 180] to reduce floating point inaccuracy
+float clampYaw(float y)
+{
+    float temp = (y + 180.0f) / 360.0f;
+    return y - ((int)temp - (temp < 0.0f ? 1 : 0)) * 360.0f;
+}
+
 void CullEvent(Window& window) {
     SDL_Event event;
     while(SDL_PollEvent(&event)) {
@@ -73,10 +86,18 @@ void CullEvent(Window& window) {
             case SDL_KEYUP:
                 input.keys[event.key.keysym.scancode] = false;
                 break;
+            case SDL_MOUSEMOTION:
+                window.mouseMove = true;
+                input.mouse.x = (float)event.motion.x - window.width / 2;
+                input.mouse.y = (float)event.motion.y - window.height / 2;
+                input.mouse.yaw = clampYaw(input.mouse.yaw + 0.001 * input.mouse.x);
+			    input.mouse.pitch = clampPitch(input.mouse.pitch - 0.001 * input.mouse.y);
+                break;
             case SDL_QUIT:
                 window.running = false;
                 break;
             default:
+                window.mouseMove = false;
                 break;
         }
     }

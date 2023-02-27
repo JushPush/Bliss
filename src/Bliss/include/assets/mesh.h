@@ -15,6 +15,8 @@
 
 #include "obj_loader.h"
 
+#include "asset.h"
+
 enum MeshBufferPositions
 {
 	POSITION_VB,
@@ -25,15 +27,21 @@ enum MeshBufferPositions
 
 static const unsigned int MESH_NUM_BUFFERS = 4;
 
-struct Mesh {
-    GLuint VAO = 0;
-    GLuint VBO[MESH_NUM_BUFFERS] = {};
-    unsigned int numIndices = 0;
-    unsigned int *indices = 0;
+class Mesh : public Asset {
+public:
+    GLuint VAO;
+    GLuint VBO[MESH_NUM_BUFFERS];
+    unsigned int numIndices;
+    unsigned int *indices;
+
+    Mesh(const std::string& fileName);
+    Mesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
+
+    void Init() {};
+    void Bind() {};
+    void Unload() {};
+
+    void InitMesh(const IndexedModel& model);
+
+    void Render();
 };
-
-Mesh CreateMesh(const std::string& fileName);
-Mesh CreateMesh(Vertex* vertices, unsigned int numVertices, unsigned int* indices, unsigned int numIndices);
-
-void InitMesh(Mesh& mesh, const IndexedModel& model);
-void RenderMesh(Mesh& mesh);
