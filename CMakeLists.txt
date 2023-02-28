@@ -1,44 +1,61 @@
-# Minimum Version
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+project(bliss LANGUAGES CXX)
 
-# Set target ouput directory
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+# Config
+option(BLISS_FORCE_ENABLE_ALL_MODULES "Force enable all modules" OFF)
+option(BLISS_FETCH_MODULES "Enable fetching required modules" ON)
 
-include_directories(${PROJECT_SOURCE_DIR}/external/include)
+# Folder structure
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(CMAKE_SKIP_INSTALL_ALL_DEPENDENCY ON)
+set(CMAKE_FOLDER CMakePredefinedTargets)
 
-set(VALID_BUILD_TYPES "Release" "Debug" "MinSizeRel" "RelWithDebInfo")
+set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)
+set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
-option(BUILD_SHARED_LIBS "True when building a shared library" True)
+# Dir variables
+set(BLISS_DIR_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(BLISS_DIR_BLISS ${CMAKE_CURRENT_SOURCE_DIR}/bliss)
+set(BLISS_DIR_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/bliss/engine)
+# set(BLISS_DIR_EDITOR ${CMAKE_CURRENT_SOURCE_DIR})
 
-# Set the project name
-project (Bliss)
+set(BLISS_DIR_OUTPUT_LIBS ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+set(BLISS_DIR_OUTPUT_INCLUDES ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-#set CMAKE_BUILD_TYPE default value
-if(NOT CMAKE_CONFIGURATION_TYPES)
-    if("${CMAKE_BUILD_TYPE}" STREQUAL "")
-        set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Build configuration" FORCE)
-    endif()
-endif()
+# C++ files
+set(BLISS_LANGUAGE CXX)
+set(BLISS_FILE_TYPES *.h *.hpp *.c *.cpp)
 
-#validate CMAKE_BUILD_TYPE
-if(NOT CMAKE_CONFIGURATION_TYPES)
-    list(FIND VALID_BUILD_TYPES "${CMAKE_BUILD_TYPE}" INDEX)
-    if(${INDEX} MATCHES -1)
-        message(FATAL_ERROR "Invalid build type. Valid types are [${VALID_BUILD_TYPES}]")
-    endif()
-endif()
+# Include Dirs
+set(BLISS_INCLUDE_ALL "")
+set(BLISS_INCLUDE_ENGINE "")
+set(BLISS_INCLUDE_THIRD_PARTY "")
 
-#Create dropdown list for CMake gui
-if(NOT CMAKE_CONFIGURATION_TYPES)
-    if(DEFINED CMAKE_BUILD_TYPE)
-        set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS ${VALID_BUILD_TYPES})
-    endif()
-endif()
+# Libs
+set(BLISS_LIBS_ALL "")
+set(BLISS_LIBS_ENGINE "")
+set(BLISS_LIBS_THIRD_PARTY "")
 
-add_subdirectory(src)
+# Definitions
+set(BLISS_DEFINITIONS "")
+list(APPEND BLISS_DEFINITIONS "BLISS_ENGINE")
 
-# target_link_libraries(dependee
-#     PUBLIC/INTERFACE/PRIVATE # pick one
-#     project)
+# Compiler Flags
+set(BLISS_COMPILER_FLAGS "")
+set(BLISS_LINKER_FLAGS "")
+
+# Force to type static
+set(BLISS_LIBRARY_TYPE STATIC)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+mark_as_advanced(FORCE BUILD_SHARED_LIBS) # Hide
+
+include("${CMAKE_MODULE_PATH}/copy_module_output.cmake")
+include("${CMAKE_MODULE_PATH}/configure_application.cmake")
+include("${CMAKE_MODULE_PATH}/configure_module.cmake")
+include("${CMAKE_MODULE_PATH}/find_sources.cmake")
+
+# Git stuff would otherwise go here IDC though
+
+set(BLISS_ENABLED_MODULE_NAMES "")
+set(BLISS_ENABLED_MODULE_PATHS "")
+add_subdirectory(${BLISS_DIR_BLISS})
