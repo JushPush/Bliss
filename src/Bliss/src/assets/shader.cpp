@@ -1,12 +1,11 @@
 #include <assets/shader.h>
-
 #include <stb_image.h>
 
 Shader::Shader(const std::string& fileName)
 {
     program = glCreateProgram();
-	shaders[0] = GLCreateShader(LoadShader(fileName + ".vs"), GL_VERTEX_SHADER);
-	shaders[1] = GLCreateShader(LoadShader(fileName + ".fs"), GL_FRAGMENT_SHADER);
+	shaders[0] = GLCreateShader(LoadShaderSRC(fileName + ".vs"), GL_VERTEX_SHADER);
+	shaders[1] = GLCreateShader(LoadShaderSRC(fileName + ".fs"), GL_FRAGMENT_SHADER);
 
 	for(unsigned int i = 0; i < S_NUM_SHADERS; i++)
 		glAttachShader(program, shaders[i]);
@@ -74,7 +73,7 @@ GLuint GLCreateShader(const std::string& text, unsigned int type)
 
 
 
-std::string LoadShader(const std::string& fileName)
+std::string LoadShaderSRC(const std::string& fileName)
 {
     std::ifstream file;
     file.open((fileName).c_str());

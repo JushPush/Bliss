@@ -4,7 +4,7 @@ add_library(Bliss::Bliss ALIAS "${PROJECT_NAME}")
 target_include_directories("${PROJECT_NAME}" PRIVATE ${PROJECT_SOURCE_DIR}/external/include)
 target_link_directories("${PROJECT_NAME}" PRIVATE ${PROJECT_SOURCE_DIR}/external/lib)
 
-target_link_libraries("${PROJECT_NAME}" GLEW GL X11 pthread SDL2main SDL2)
+target_link_libraries("${PROJECT_NAME}" GLEW GL X11 pthread SDL2main SDL2 SDL2_ttf)
 
 set(Bliss_EXPORT_FILE "Bliss-Exports")
 install(TARGETS "${PROJECT_NAME}" EXPORT "${Bliss_EXPORT_FILE}")

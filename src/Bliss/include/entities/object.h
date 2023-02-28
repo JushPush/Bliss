@@ -4,6 +4,8 @@
 #include "../assets/shader.h"
 #include "../assets/texture.h"
 
+#include "transform.h"
+
 class Object
 {
 public:
@@ -13,12 +15,16 @@ public:
     void SetTexture(Texture texture);
     void SetMesh(Mesh mesh);
 
-    void Update();
-    void Render();
+    void Update(const Camera& camera) { _shader.Bind(); _texture.Bind(); _shader.Update(_transform, camera); }
+    void Render() { _mesh.Render(); }
+
+    Transform* getTransform() { return &_transform; }
 
 protected:
 private:
     Shader _shader;
     Texture _texture;
     Mesh _mesh;
+
+    Transform _transform;
 };

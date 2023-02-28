@@ -15,6 +15,8 @@
 
 #include "assets/shader.h"
 
+#include "entities/object.h"
+
 #include "renderer/skybox.h"
 // Debug
 #include "logger.h"

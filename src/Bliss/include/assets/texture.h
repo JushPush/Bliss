@@ -13,6 +13,8 @@ class Texture : public Asset
 public:
     GLuint texture;
 
+    Texture() {};
+
     Texture(const std::string& fileName);
 
     void Init() {};
