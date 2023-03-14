@@ -4,14 +4,14 @@ execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${BLISS_DIR_OUTPUT_
 execute_process(COMMAND ${CMAKE_COMMAND} -E remove_directory ${BLISS_DIR_OUTPUT_LIBS}/)
 
 macro(bliss_add_module NAME PATH DIR)
-    if (NOT ${NAME} STREQUAL "core")
-        string(TOUPPER ${NAME} VARIABLE_NAME)
-        option(BLISS_MODULE_${VARIABLE_NAME} "Adds module ${NAME} from the build if enabled" OFF)
-    endif()
+    #if (NOT ${NAME} STREQUAL "core")
+    #    string(TOUPPER ${NAME} VARIABLE_NAME)
+    #    option(BLISS_MODULE_${VARIABLE_NAME} "Adds module ${NAME} from the build if enabled" OFF)
+    #endif()
 
-    if ((${NAME} STREQUAL "core") OR
-        (${BLISS_MODULE_${VARIABLE_NAME}}) OR
-        (${BLISS_FORCE_ENABLE_ALL_MODULES}))
+    #if ((${NAME} STREQUAL "core") OR
+    #    (${BLISS_MODULE_${VARIABLE_NAME}}) OR
+    #    (${BLISS_FORCE_ENABLE_ALL_MODULES}))
 
         message(STATUS: "MODULE: \"${NAME}\" [Enabled]")
 
@@ -39,11 +39,14 @@ macro(bliss_add_module NAME PATH DIR)
 
 		list(APPEND BLISS_ENABLED_MODULE_NAMES ${NAME})
 		list(APPEND BLISS_ENABLED_MODULE_PATHS ${PATH})
-    else()
-        message(STATUS "MODULE: \"${NAME}\" [Disabled]")
-    endif()
+    #else()
+    #    message(STATUS "MODULE: \"${NAME}\" [Disabled]")
+    #endif()
 
 endmacro()
+
+bliss_add_module("core" "bliss/engine/core" "bliss/engine")
+bliss_add_module("graphics" "bliss/engine/graphics" "bliss/engine")
 
 if (NOT ${SUBMODULE_COUNT} EQUAL 0)
 	bliss_add_module("core" "bliss/engine/core" "bliss/engine")

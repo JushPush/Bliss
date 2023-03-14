@@ -2,4 +2,4 @@
 
 rm -rf build
 ./configure
-cmake --build build
+cmake --build build --config Debug

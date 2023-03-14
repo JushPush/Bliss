@@ -83,6 +83,7 @@ float clampYaw(float y)
     return y - ((int)temp - (temp < 0.0f ? 1 : 0)) * 360.0f;
 }
 
+/// Registers key press and may also be necessary for FPS capping
 void CullEvent(Window& window) {
     SDL_Event event;
     while(SDL_PollEvent(&event)) {

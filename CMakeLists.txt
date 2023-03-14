@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 project(bliss LANGUAGES CXX)
 
 # Config
-option(BLISS_FORCE_ENABLE_ALL_MODULES "Force enable all modules" OFF)
+option(BLISS_FORCE_ENABLE_ALL_MODULES "Force enable all modules" ON)
 option(BLISS_FETCH_MODULES "Enable fetching required modules" ON)
 
 # Folder structure
@@ -15,6 +15,7 @@ set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
 
 # Dir variables
 set(BLISS_DIR_ROOT ${CMAKE_CURRENT_SOURCE_DIR})
+set(BLISS_DIR_SAMPLES ${CMAKE_CURRENT_SOURCE_DIR}/samples)
 set(BLISS_DIR_BLISS ${CMAKE_CURRENT_SOURCE_DIR}/bliss)
 set(BLISS_DIR_ENGINE ${CMAKE_CURRENT_SOURCE_DIR}/bliss/engine)
 # set(BLISS_DIR_EDITOR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -54,8 +55,12 @@ include("${CMAKE_MODULE_PATH}/configure_application.cmake")
 include("${CMAKE_MODULE_PATH}/configure_module.cmake")
 include("${CMAKE_MODULE_PATH}/find_sources.cmake")
 
+include_directories(${PROJECT_SOURCE_DIR}/external/include)
+
 # Git stuff would otherwise go here IDC though
 
 set(BLISS_ENABLED_MODULE_NAMES "")
 set(BLISS_ENABLED_MODULE_PATHS "")
 add_subdirectory(${BLISS_DIR_BLISS})
+
+add_subdirectory(${BLISS_DIR_SAMPLES})

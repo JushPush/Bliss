@@ -1,6 +1,6 @@
 project(core LANGUAGES ${BLISS_LANGUAGE})
 
-bliss_find_sources(sources "${PROJECT_SOURCE_DIR}"/srcc)
+bliss_find_sources(sources "${PROJECT_SOURCE_DIR}/src")
 add_library(core ${BLISS_LIBRARY_TYPE} ${sources})
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
